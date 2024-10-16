@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://br8vmdxvellgh"]
+
+[ext_resource type="Script" path="res://ViewportToCompositorEffect.cs" id="1_22tco"]
+[ext_resource type="Script" path="res://ViewportHandler.cs" id="2_7l0ea"]
+[ext_resource type="Script" path="res://FreeLookCameraBase.cs" id="2_v2yax"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1em8q"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_2c5y0"]
+sky_material = SubResource("ProceduralSkyMaterial_1em8q")
+
+[sub_resource type="Environment" id="Environment_5d243"]
+background_mode = 2
+sky = SubResource("Sky_2c5y0")
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_lgm5x"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_22tco")
+
+[sub_resource type="Compositor" id="Compositor_4nie5"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_lgm5x")])
+
+[sub_resource type="BoxMesh" id="BoxMesh_10fee"]
+
+[node name="Root" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5d243")
+compositor = SubResource("Compositor_4nie5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.454519, 0.541675, 0, 0.766044, 0.642787, -0.707107, -0.454519, 0.541675, 16, 16, 16)
+cull_mask = 524287
+current = true
+fov = 70.0
+near = 0.01
+far = 200.0
+script = ExtResource("2_v2yax")
+
+[node name="Box" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_10fee")
+
+[node name="ViewportHandler" type="Node3D" parent="." node_paths=PackedStringArray("Environment")]
+script = ExtResource("2_7l0ea")
+Environment = NodePath("../WorldEnvironment")

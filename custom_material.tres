@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b04axb7da8q0h"]
+
+[ext_resource type="Shader" path="res://custom_shader.gdshader" id="1_f52pb"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_f52pb")
+shader_parameter/radius = 1.0
